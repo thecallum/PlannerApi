@@ -1,0 +1,7 @@
+version: "3.2"
+services:
+  test:
+    image: test
+    build:
+      context: .
+      dockerfile: PlannerApi.Tests/Dockerfile
