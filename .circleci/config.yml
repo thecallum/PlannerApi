@@ -36,11 +36,11 @@ jobs:
   deploy-to-production:
     executor: docker-dotnet
     steps:
-      # - *attach_workspace
+      - *attach_workspace
       - checkout
       # - aws-cli/setup
       # - serverless-framework/setup
-      # - setup_remote_docker
+      - setup_remote_docker
       - run:
           name: Install Node.js
           command: |
@@ -65,15 +65,15 @@ jobs:
 workflows:
   test-and-deploy:
     jobs: 
-        - build-and-test
+        # - build-and-test
         # - migrate-database:
         #     requires:
         #       - terraform-init-and-apply
         #     filters:
         #       only: main
-        - deploy-to-production:
-            requires:
-              - build-and-test
+        - deploy-to-production
+            # requires:
+            #   - build-and-test
             # filters:
               # only: main
 
