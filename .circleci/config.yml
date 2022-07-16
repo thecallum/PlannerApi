@@ -10,7 +10,7 @@ orbs:
 executors:
   docker-dotnet:
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:3.1
+      - image: mcr.microsoft.com/dotnet/sdk:6.0
   docker-python:
     docker:
       - image: circleci/python:3.7
@@ -21,7 +21,7 @@ references:
     &attach_workspace
     attach_workspace:
       at: *workspace_root
-      
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
