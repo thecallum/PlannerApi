@@ -2,14 +2,18 @@ service: planner-api
 
 provider:
   name: aws
-  
+  runtime: dotnet6
+  memorySize: 2048
+  timeout: 15
+  region: eu-west-2
+
 functions:
   PlannerApi:
     name: PlannerAPi
     handler: PlannerApi::PlannerApi.LambdaEntryPoint::FunctionHandlerAsync
     role: lambdaExecutionRole
     environment:
-      CONNECTION_STRING: Host=${ssm:/planner-api/production/connection-string}
+      CONNECTION_STRING: ${ssm:/planner-api/production/connection-string}
     events:
       - http:
           path: /{proxy+}
