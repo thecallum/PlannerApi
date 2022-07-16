@@ -71,15 +71,15 @@ jobs:
 workflows:
   test-and-deploy:
     jobs: 
-        # - build-and-test
+        - build-and-test
         # - migrate-database:
         #     requires:
         #       - terraform-init-and-apply
         #     filters:
         #       only: main
-        - deploy-to-production
-            # requires:
-            #   - build-and-test
-            # filters:
-              # only: main
+        - deploy-to-production:
+            requires:
+              - build-and-test
+            filters:
+              only: main
 
