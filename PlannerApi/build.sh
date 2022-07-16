@@ -17,4 +17,4 @@ then
 fi
 
 dotnet restore
-dotnet lambda package --configuration release --framework net6.0 --output-package ./bin/release/net6.0/repairs-api.zip
+dotnet lambda package --configuration release --framework net6.0 --output-package ./bin/release/net6.0/planner-api.zip
