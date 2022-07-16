@@ -30,7 +30,7 @@ jobs:
 
   deploy-to-production:
     steps:
-      - *attach_workspace
+      # - *attach_workspace
       - checkout
       - setup_remote_docker
       - run:
