@@ -66,8 +66,7 @@ jobs:
           name: Deploy lambda
           command: |
             cd ./PlannerApi/
-            sls deploy --stage production --conceal --package ./bin/release/net6.0/planner-api.zip
-
+            sls deploy --stage production --conceal
 
 workflows:
   test-and-deploy:

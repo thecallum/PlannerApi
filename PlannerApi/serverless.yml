@@ -7,6 +7,9 @@ provider:
   timeout: 15
   region: eu-west-2
 
+package:
+  artifact: ./bin/release/net6.0/planner-api.zip
+
 functions:
   PlannerApi:
     name: PlannerApi
