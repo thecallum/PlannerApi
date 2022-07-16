@@ -1,4 +1,4 @@
-server: plannerApi
+service: planner-api
 
 provider:
   name: aws
