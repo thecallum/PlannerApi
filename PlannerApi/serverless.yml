@@ -21,12 +21,10 @@ functions:
       - http:
           path: /{proxy+}
           method: ANY
-          # authorizer:
-          #   arn: ${ssm:/api-authenticator/${self:provider.stage}/arn}
-          #   type: request
-          #   resultTtlInSeconds: 0
-          #   identitySource: method.request.header.Authorization
-          #   managedExternally: true
+          authorizer:
+            name: CognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn: arn:aws:cognito-idp:eu-west-2:714664911966:userpool/eu-west-2_IDJRwWoOA
           cors:
             origin: '*' # need to update
             headers:
