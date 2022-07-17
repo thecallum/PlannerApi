@@ -77,7 +77,10 @@ jobs:
             HOST=$(aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/host --query Parameter.Value)
             INSTANCE_NAME=$(aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/sshbox --query Parameter.Value)
 
-            ssh -4 -i ./private-key.pem -L 6000:${HOST} -Nf -M --region=eu-west-2 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o ServerAliveInterval=0  ProxyCommand="aws ssm start-session --target %h --document AWS-StartSSHSession --parameters portNumber=6000 --region=eu-west-2"
+            # ssh -4 -i ./private-key.pem -L 6000:${HOST} -Nf -M --region=eu-west-2 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o ServerAliveInterval=0  ProxyCommand="aws ssm start-session --target %h --document AWS-StartSSHSession --parameters portNumber=6000 --region=eu-west-2"
+
+            ssh -i "newKeyPair.pem" ec2-user@ec2-13-40-188-145.eu-west-2.compute.amazonaws.com -L 6000:projectdatabase.cc6d9fr0csgm.eu-west-2.rds.amazonaws.com:5432 -nf -M
+            # ssh -4 -i ./private-key.pem -L 6000:${HOST} -Nf -M --region=eu-west-2 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o ServerAliveInterval=0  ProxyCommand="aws ssm start-session --target %h --document AWS-StartSSHSession --parameters portNumber=6000 --region=eu-west-2"
 
             CONNECTION_STRING=$(aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/ssh-connection-string --query Parameter.Value)
 
