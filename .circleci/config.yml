@@ -74,10 +74,15 @@ jobs:
             chmod 400 ./private-key.pem
 
             CONNECTION_STRING=$(aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/connection-string --query Parameter.Value)
-            HOST=$(aws ssm get-parameter --name /planner-api/production/host --query Parameter.Value)
-            INSTANCE_NAME=$(aws ssm get-parameter --name /planner-api/production/sshbox --query Parameter.Value)
+            HOST=$(aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/host --query Parameter.Value)
+            INSTANCE_NAME=$(aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/sshbox --query Parameter.Value)
 
             ssh -i ./private-key.pem ${INSTANCE_NAME} -L 6000:${HOST} -N --region=eu-west-2"
+
+
+
+
+
 
             cd ./RepairsApi/
             ./../dotnet-ef-local/dotnet-ef database update -c PlannerApi.Infrastructure.PlannerContext
