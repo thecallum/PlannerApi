@@ -77,9 +77,9 @@ jobs:
             HOST=$(aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/host --query Parameter.Value)
             INSTANCE_NAME=$(aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/sshbox --query Parameter.Value)
 
-            ssh -i ./private-key.pem ${INSTANCE_NAME} -L 6000:${HOST} -Nf -M --region=eu-west-2  ProxyCommand="aws ssm start-session --target %h --document AWS-StartSSHSession --parameters portNumber=%p --region=eu-west-2"
+            ssh -i ./private-key.pem ${INSTANCE_NAME} -L 5432:${HOST} -Nf -M --region=eu-west-2  ProxyCommand="aws ssm start-session --target %h --document AWS-StartSSHSession --parameters portNumber=%p --region=eu-west-2"
 
-
+            CONNECTION_STRING=$(aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/planner-api/production/ssh-connection-string --query Parameter.Value)
 
             cd ./PlannerApi/
             ./../dotnet-ef-local/dotnet-ef database update -c PlannerApi.Infrastructure.PlannerContext
