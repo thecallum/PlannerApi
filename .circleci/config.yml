@@ -41,8 +41,6 @@ jobs:
             docker-compose run test
 
   migrate-database:
-    description: "Migrate Database"
-    migrate-database:
     description: "Migrate database"
     parameters:
       stage:
