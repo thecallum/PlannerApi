@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using PlannerApi.Infrastructure;
+
 namespace PlannerApi;
 
 public class Startup
@@ -12,7 +15,20 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container
     public void ConfigureServices(IServiceCollection services)
     {
+        ConfigureDbContext(services);
         services.AddControllers();
+    }
+
+    private void ConfigureDbContext(IServiceCollection services)
+    {
+        var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
+                            ?? Configuration.GetValue<string>("DatabaseConnectionString");
+
+        services.AddDbContext<PlannerContext>(
+            opt => opt
+                .UseNpgsql(connectionString)
+                .UseSnakeCaseNamingConvention()
+        );
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
