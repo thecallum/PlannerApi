@@ -80,8 +80,8 @@ jobs:
             ssh -4 -i ./private-key.pem ec2-user@ec2-13-40-188-145.eu-west-2.compute.amazonaws.com -L 6000:projectdatabase.cc6d9fr0csgm.eu-west-2.rds.amazonaws.com:5432 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o ServerAliveInterval=0 -fN
 
             # CONN_STR="$(aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/ssh-connection-string --query Parameter.Value)""
-            CONN_STR="Host=localhost;Port=6000;Database=PlannerApi;Username=postgres;Password=free"
-
+            # CONN_STR="Host=localhost;Port=6000;Database=PlannerApi;Username=postgres;Password=free"
+            CONN_STR="Host=localhost;Port=6000;Database=PlannerApi;Username=postgres;Password='$(aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/db-password --query Parameter.Value)'"
             cd ./PlannerApi/
             CONNECTION_STRING=${CONN_STR} ./../dotnet-ef-local/dotnet-ef database update -c PlannerApi.Infrastructure.PlannerContext
 
