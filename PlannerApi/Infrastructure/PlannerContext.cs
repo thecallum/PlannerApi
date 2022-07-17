@@ -10,5 +10,6 @@ namespace PlannerApi.Infrastructure
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<TestEntity> TestEntities { get; set; }
     }
 }
