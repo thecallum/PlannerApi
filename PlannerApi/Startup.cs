@@ -21,8 +21,8 @@ public class Startup
 
     private void ConfigureDbContext(IServiceCollection services)
     {
-        var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
-                            ?? Configuration.GetValue<string>("DatabaseConnectionString");
+        var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+                            // ?? Configuration.GetValue<string>("DatabaseConnectionString");
 
         services.AddDbContext<PlannerContext>(
             opt => opt
