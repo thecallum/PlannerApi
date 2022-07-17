@@ -40,6 +40,52 @@ jobs:
           command: |
             docker-compose run test
 
+  migrate-database:
+    description: "Migrate Database"
+    migrate-database:
+    description: "Migrate database"
+    parameters:
+      stage:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install SSH client
+          command: apt-get update && apt-get install -y openssh-client
+      - run:
+          name: Install Unzip
+          command: apt-get update && apt-get install unzip
+      - run:
+          name: Install AWS CLI
+          command: |
+            curl -L -o awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+            unzip awscliv2.zip
+            ./aws/install
+      - run:
+          name: Install Session Manager plugin
+          command: |
+            curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
+            dpkg -i session-manager-plugin.deb
+      - run:
+          name: Install dotnet ef core
+          command: dotnet tool install dotnet-ef --version 6.0.6 --tool-path ./dotnet-ef-local/
+      - run:
+          name: SSH into RDS and migrate database
+          command: |
+            aws --region=eu-west-2 ssm get-parameter --name "/planner-api/production/ssh-pem" --output text --query Parameter.Value > ./private-key.pem
+            chmod 400 ./private-key.pem
+
+            CONNECTION_STRING=$(aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/connection-string --query Parameter.Value)
+            HOST=$(aws ssm get-parameter --name /planner-api/production/host --query Parameter.Value)
+            INSTANCE_NAME=$(aws ssm get-parameter --name /planner-api/production/sshbox --query Parameter.Value)
+
+            ssh -i ./private-key.pem ${INSTANCE_NAME} -L 6000:${HOST} -N
+
+            cd ./RepairsApi/
+            ./../dotnet-ef-local/dotnet-ef database update -c PlannerApi.Infrastructure.PlannerContext
+
   deploy-to-production:
     executor: docker-dotnet
     steps:
@@ -69,16 +115,16 @@ jobs:
 workflows:
   test-and-deploy:
     jobs: 
-        - build-and-test
-        # - migrate-database:
+        # - build-and-test
+        - migrate-database
+            # requires:
+              # - terraform-init-and-apply
+            # filters:
+              # only: main
+        # - deploy-to-production:
         #     requires:
-        #       - terraform-init-and-apply
+        #       - build-and-test
         #     filters:
-        #       only: main
-        - deploy-to-production:
-            requires:
-              - build-and-test
-            filters:
-              branches:
-                only: main
+        #       branches:
+        #         only: main
 
