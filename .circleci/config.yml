@@ -79,12 +79,7 @@ jobs:
 
             ssh -i ./private-key.pem ${INSTANCE_NAME} -L 6000:${HOST} -N --region=eu-west-2"
 
-
-
-
-
-
-            cd ./RepairsApi/
+            cd ./PlannerApi/
             ./../dotnet-ef-local/dotnet-ef database update -c PlannerApi.Infrastructure.PlannerContext
 
   deploy-to-production:
