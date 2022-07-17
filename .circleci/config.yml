@@ -42,9 +42,7 @@ jobs:
 
   migrate-database:
     description: "Migrate database"
-    parameters:
-      stage:
-        type: string
+    executor: docker-dotnet
     steps:
       - *attach_workspace
       - checkout
