@@ -113,7 +113,7 @@ workflows:
   test-and-deploy:
     jobs: 
         - build-and-test
-        - migrate-database
+        - migrate-database:
             requires:
               - build-and-test
             filters:
