@@ -82,19 +82,6 @@ jobs:
             CONN_STR="Host=localhost;Password=${PASSWORD};Port=6000;Username=${USERNAME};Database=${DATABASE}"            
             cd ./PlannerApi/
             CONNECTION_STRING=${CONN_STR} ./../dotnet-ef-local/dotnet-ef database update -c PlannerApi.Infrastructure.PlannerContext
-            
-            # aws --region=eu-west-2 ssm get-parameter --name "/planner-api/production/ssh-pem" --output text --query Parameter.Value > ./private-key.pem
-            # chmod 400 ./private-key.pem
-            # HOST=`aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/postgres-hostname --query Parameter.Value --output text`
-            # PORT=`aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/postgres-port --query Parameter.Value --output text`
-            # INSTANCE_NAME=`aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/sshbox --query Parameter.Value --output text`
-            # ssh -4 -i ./private-key.pem ${INSTANCE_NAME//\"} -L 6000:${HOST//\"}:${PORT//\"} -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o ServerAliveInterval=0 -fN
-            # PASSWORD=`aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/postgres-password --query Parameter.Value --output text`
-            # USERNAME=`aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/postgres-username --query Parameter.Value --output text`
-            # DATABASE=`aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/postgres-database --query Parameter.Value --output text`
-            # CONN_STR="Host=localhost;Password=${PASSWORD};Port=6000;Username=${USERNAME};Database=${DATABASE}"
-            # cd ./PlannerApi/
-            # CONNECTION_STRING=${CONN_STR} ./../dotnet-ef-local/dotnet-ef database update -c PlannerApi.Infrastructure.PlannerContext
 
   deploy-to-production:
     executor: docker-dotnet
@@ -125,16 +112,16 @@ jobs:
 workflows:
   test-and-deploy:
     jobs: 
-        # - build-and-test
+        - build-and-test
         - migrate-database
-            # requires:
-              # - terraform-init-and-apply
-            # filters:
-              # only: main
-        # - deploy-to-production:
-        #     requires:
-        #       - build-and-test
-        #     filters:
-        #       branches:
-        #         only: main
+            requires:
+              - build-and-test
+            filters:
+              only: main
+        - deploy-to-production:
+            requires:
+              - migrate-database
+            filters:
+              branches:
+                only: main
 
