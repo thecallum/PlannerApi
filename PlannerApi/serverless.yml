@@ -16,8 +16,7 @@ functions:
     handler: PlannerApi::PlannerApi.LambdaEntryPoint::FunctionHandlerAsync
     role: lambdaExecutionRole
     environment:
-      CONNECTION_STRING: ${ssm:/planner-api/production/connection-string}
-      Host=${ssm:/planner-api/production/postgres-hostname};Port=${ssm:/planner-api/production/postgres-port};Database=${ssm:/planner-api/production/postgres-database};Username=${ssm:/planner-api/production/postgres-username};Password=${ssm:/planner-api/production/postgres-password}
+      CONNECTION_STRING: Host=${ssm:/planner-api/production/postgres-hostname};Port=${ssm:/planner-api/production/postgres-port};Database=${ssm:/planner-api/production/postgres-database};Username=${ssm:/planner-api/production/postgres-username};Password=${ssm:/planner-api/production/postgres-password}
     events:
       - http:
           path: /{proxy+}
