@@ -117,7 +117,8 @@ workflows:
             requires:
               - build-and-test
             filters:
-              only: main
+              branches:
+                only: main
         - deploy-to-production:
             requires:
               - migrate-database
