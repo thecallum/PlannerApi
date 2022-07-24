@@ -73,8 +73,9 @@ jobs:
             aws --region=eu-west-2 ssm get-parameter --name "/planner-api/production/ssh-pem" --output text --query Parameter.Value > ./private-key.pem
             chmod 400 ./private-key.pem
             HOST=`aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/postgres-hostname --query Parameter.Value --output text`
-            INSTANCE_NAME=$(aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/sshbox --query Parameter.Value)
-            ssh -4 -i ./private-key.pem ec2-user@ec2-13-40-188-145.eu-west-2.compute.amazonaws.com -L 6000:${HOST}:5432 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o ServerAliveInterval=0 -fN
+            PORT=`aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/postgres-port --query Parameter.Value --output text`
+            INSTANCE_NAME=`aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/sshbox --query Parameter.Value --output text`
+            ssh -4 -i ./private-key.pem ec2-user@${INSTANCE_NAME} -L 6000:${HOST}:${PORT} -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o ServerAliveInterval=0 -fN
             PASSWORD=`aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/postgres-password --query Parameter.Value --output text`
             USERNAME=`aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/postgres-username --query Parameter.Value --output text`
             DATABASE=`aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/postgres-database --query Parameter.Value --output text`
