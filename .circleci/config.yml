@@ -74,8 +74,8 @@ jobs:
             chmod 400 ./private-key.pem
 
             HOST=$(aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/postgres-hostname --query Parameter.Value)
-            PORT=$(aws --region=eu-west-2 ssm get-parameter --name/planner-api/production/postgres-port --query Parameter.Value)
-            INSTANCE_NAME=$(aws --region=eu-west-2  ssm get-parameter --name /planner-api/production/sshbox --query Parameter.Value)
+            PORT=$(aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/postgres-port --query Parameter.Value)
+            INSTANCE_NAME=$(aws --region=eu-west-2 ssm get-parameter --name /planner-api/production/sshbox --query Parameter.Value)
 
             ssh -4 -i ./private-key.pem ${INSTANCE_NAME//\"} -L ${PORT//\"}:${HOST//\"}:${PORT//\"} -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o ServerAliveInterval=0 -fN
 
